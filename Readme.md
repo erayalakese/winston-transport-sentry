@@ -1,6 +1,7 @@
 winston-transport-sentry
 ========================
 
+### This package is a fork of @alexpts's alexpts/winston-transport-sentry
 
 ### Compitable
 Winston@3+
@@ -26,6 +27,7 @@ var logger = new winston.Logger({
             dsn: "{{ YOUR SENTRY DSN }}",
             tags: { key: 'value' },
             extra: { key: 'value' },
+            user: {},
             patchGlobal: false
         })
     ],
