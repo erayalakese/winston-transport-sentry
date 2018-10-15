@@ -24,7 +24,7 @@ const errorHandler = (error) => {
  * @param {string} info.level
  * @return {{}}
  */
-const prepareMeta = (info) => {
+const prepareMeta = (info, user) => {
     let extra = Object.assign({}, info);
     delete extra.message;
     delete extra.level;
@@ -36,6 +36,7 @@ const prepareMeta = (info) => {
     return {
         level: winstonLevelToSentryLevel[info.level],
         tags: info.tags || {},
+        user,
         extra,
     };
 };
@@ -69,6 +70,7 @@ class SentryWinstonTransport extends Transport {
             patchGlobal: false,
             install: false,
             tags: {},
+            user: {},
             extra: {},
             errorHandler,
         }, options);
@@ -84,7 +86,7 @@ class SentryWinstonTransport extends Transport {
      */
     async log(info, done) {
         if (this.silent) return done(null, true);
-        let meta = prepareMeta(info);
+        let meta = prepareMeta(info, this.options.user);
 
         let method = info.message === 'error' ? 'captureException' : 'captureMessage';
 
